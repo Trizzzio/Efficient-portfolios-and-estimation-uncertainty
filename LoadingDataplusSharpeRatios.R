@@ -1,6 +1,13 @@
 library(tidyverse)
 library(tidyquant)
 library(lubridate)
+library(kableExtra)
+
+# Save plots to working directory
+save_plots <- T
+
+# Plot plots?
+plot_plots <- T
 
 #Load data 
 
@@ -23,24 +30,22 @@ FFIndustry = read.csv("./10_Industry_Portfolios.csv", skip=11) %>%
 
 returns = FFIndustry %>% select(-date) 
 
-sigma <- returns %>%
+sigma_true <- returns %>%
   cov(use = "pairwise.complete.obs") # Compute return sample covariance matrix
 
-mu <- returns %>%
+mu_true <- returns %>%
   colMeans() %>%
   as.matrix()
 
-ann_mu=12*mu
+ann_mu=12*mu_true
 
-ann_sigma=12*sigma
+ann_sigma=12*sigma_true
+##### Creating Table of mean and variance for Latex
+as.data.frame(apply(sigma_true,c(1,2),function(x) round(x,2))) %>% kable(align = 'c', format = 'latex') %>% 
+  kable_styling(full_width = FALSE,latex_options = "striped")
+#####
 
-
-
-#Calculate Sharpe Ratio
-
-sharpe = mu/sqrt(diag(sigma)) %>% as.tibble(rownames=NA)%>%
-  rename(SharpeRatio = value) 
-
-ann_sharpe=sqrt(12)*mu/sqrt(diag(sigma)) %>% as.tibble(rownames=NA)%>%
-  rename(SharpeRatio = value) 
+# Sharpe ratio (assuming r_f = 0 and not using annualized measures).
+SR <- mu_true/sqrt(diag(sigma_true))
+print(paste0("The stock with the largest SR was: ",round(SR[which(SR==max(SR))][1],2)," of ",attributes(SR[which(SR==max(SR))])$names,"."))
 
