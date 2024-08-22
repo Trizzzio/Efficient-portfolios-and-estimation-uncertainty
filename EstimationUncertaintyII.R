@@ -33,7 +33,7 @@ if (plot_plots) p5
 
 # Increase N to 1133 and compare to N = 100
 for (i in 1:250) {
-  SRs[i,"SR2"] <- portfolio_performance(nrow(data))
+  SRs[i,"SR2"] <- portfolio_performance(nrow(FFIndustry))
 }
 p6 <- p5 + geom_histogram(aes(x=SR2),SRs,color="darkblue", fill="lightblue",bins=20)
 if (plot_plots) p6

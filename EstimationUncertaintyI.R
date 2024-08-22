@@ -58,5 +58,5 @@ p3 <- plot_frontiers(N)
 if (plot_plots) p3
 
 # Plotting with sample size N = 1133 (initial sample size)
-p4 <- plot_frontiers(nrow(data))
+p4 <- plot_frontiers(nrow(FFIndustry))
 if (plot_plots) p4
